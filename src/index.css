@@ -1244,3 +1244,116 @@ body, html, #root {
   padding: 12px;
   border-radius: 10px;
 }
+
+/* 7. MOBILE RESPONSIVE OPTIMIZATIONS */
+@media (max-width: 768px) {
+  .top-nav-bar {
+    height: 56px;
+    padding: 0 10px;
+  }
+
+  .nav-subtitle {
+    display: none;
+  }
+
+  .nav-title {
+    font-size: 15px;
+  }
+
+  .mode-btn span {
+    display: none;
+  }
+
+  .mode-btn {
+    padding: 6px 8px;
+  }
+
+  .export-dropdown-group span {
+    display: none;
+  }
+
+  .nav-btn-primary, .nav-btn-secondary {
+    padding: 6px 8px;
+  }
+
+  .floating-control-dock {
+    bottom: 12px;
+    max-width: 95vw;
+    padding: 6px 8px;
+    gap: 6px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .floating-control-dock::-webkit-scrollbar {
+    display: none;
+  }
+
+  .style-btn span {
+    display: none;
+  }
+
+  .style-btn {
+    padding: 6px;
+  }
+
+  .dock-tool-btn span {
+    display: none;
+  }
+
+  .dock-tool-btn {
+    padding: 6px 8px;
+  }
+
+  .dock-size-control span {
+    display: none;
+  }
+
+  .dock-slider {
+    width: 55px;
+  }
+
+  .sidebar-drawer {
+    width: 100vw;
+    top: 56px;
+  }
+
+  .minimal-watermark-link {
+    bottom: 66px;
+    left: 10px;
+    padding: 4px 8px;
+    font-size: 10px;
+  }
+
+  .gesture-modal-card {
+    max-width: 94vw;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  .gesture-cards-grid {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+
+  .instruction-gesture-card {
+    padding: 12px;
+  }
+}
+
+@media (max-width: 480px) {
+  .nav-title {
+    font-size: 13px;
+    letter-spacing: 0.5px;
+  }
+
+  .nav-logo-icon {
+    width: 32px;
+    height: 32px;
+  }
+
+  .dock-divider {
+    height: 20px;
+  }
+}
