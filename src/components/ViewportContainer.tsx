@@ -5,7 +5,6 @@ import type { TelemetryData, GestureState } from '../types/tracking';
 import { GlassCanvas } from './GlassCanvas';
 import { DebugHUD } from './DebugHUD';
 import { GestureRingOverlay } from './GestureRingOverlay';
-import { TopCanvasBarOverlay } from './TopCanvasBarOverlay';
 import { WatermarkBadge } from './WatermarkBadge';
 
 interface ViewportContainerProps {
@@ -23,7 +22,6 @@ interface ViewportContainerProps {
   gestureState: GestureState;
   telemetry: TelemetryData;
   viewportDimensions: { width: number; height: number };
-  hoveredTopButton: string | null;
 }
 
 export const ViewportContainer: React.FC<ViewportContainerProps> = ({
@@ -41,7 +39,6 @@ export const ViewportContainer: React.FC<ViewportContainerProps> = ({
   gestureState,
   telemetry,
   viewportDimensions,
-  hoveredTopButton,
 }) => {
   return (
     <main className={`viewport-container mode-${viewportMode} bg-${backgroundPreset}`}>
@@ -61,15 +58,7 @@ export const ViewportContainer: React.FC<ViewportContainerProps> = ({
         <div className={`backdrop-preset-layer preset-${backgroundPreset}`} />
       )}
 
-      {/* 3. Top Interactive Air Buttons (CLEAR, BLUE, GREEN, RED, YELLOW) */}
-      <TopCanvasBarOverlay
-        activeColor={brushSettings.color}
-        onSelectColor={() => {}}
-        onClear={() => {}}
-        hoveredButton={hoveredTopButton}
-      />
-
-      {/* 4. Virtual Glass Canvas Layer */}
+      {/* 3. Virtual Glass Canvas Layer */}
       <GlassCanvas
         glassSettings={glassSettings}
         strokes={strokes}
@@ -80,7 +69,7 @@ export const ViewportContainer: React.FC<ViewportContainerProps> = ({
         height={viewportDimensions.height}
       />
 
-      {/* 5. Computer Vision Telemetry & Landmark Skeleton HUD */}
+      {/* 4. Computer Vision Telemetry & Landmark Skeleton HUD */}
       {debugMode && (
         <DebugHUD
           landmarks={gestureState.landmarks}
@@ -91,7 +80,7 @@ export const ViewportContainer: React.FC<ViewportContainerProps> = ({
         />
       )}
 
-      {/* 6. Air Cursor Pointer & Hold-to-Clear / Hold-to-Start Countdown Ring */}
+      {/* 5. Air Cursor Pointer & Hold-to-Clear / Hold-to-Start Countdown Ring */}
       <GestureRingOverlay
         cursorPosition={gestureState.cursorPosition}
         activeGesture={gestureState.activeGesture}
@@ -103,7 +92,7 @@ export const ViewportContainer: React.FC<ViewportContainerProps> = ({
         brushColor={brushSettings.color}
       />
 
-      {/* 7. Portfolio Watermark Badge (Aliba N. & LinkedIn Link) */}
+      {/* 6. Portfolio Watermark Badge */}
       <WatermarkBadge />
     </main>
   );

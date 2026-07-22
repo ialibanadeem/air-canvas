@@ -33,7 +33,6 @@ Air Canvas Studio was engineered to demonstrate enterprise-grade real-time compu
 - **✊ Stroke Break (Pen Up)**: Fold index finger or form a fist to lift pen off canvas and reposition hand without creating unwanted connecting lines.
 - **✌️ Gesture Eraser**: Extend Index + Middle fingers together to dynamically erase stroke points within a customizable radius.
 - **🖐️ Open Palm Canvas Clear**: Hold an open palm facing the camera for 1.5 seconds with visual SVG radial countdown ring to clear all strokes.
-- **🎯 Spatial Air Button Collision Bar**: Y-coordinate collision detection ($Y \le 0.16$) allows users to select colors (`BLUE`, `GREEN`, `RED`, `YELLOW`) or hit `CLEAR ALL` by physically pointing at top air buttons.
 
 ---
 

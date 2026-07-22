@@ -14,7 +14,6 @@ import { ControlDock } from './components/ControlDock';
 import { SidebarPanel } from './components/SidebarPanel';
 import { ViewportContainer } from './components/ViewportContainer';
 import { GestureInstructionsModal } from './components/GestureInstructionsModal';
-import { TOP_BUTTONS } from './components/TopCanvasBarOverlay';
 
 export const App: React.FC = () => {
   // 1. Viewport & Camera State
@@ -41,7 +40,6 @@ export const App: React.FC = () => {
   });
 
   const [isEraserActive, setIsEraserActive] = useState<boolean>(false);
-  const [hoveredTopButton, setHoveredTopButton] = useState<string | null>(null);
 
   // 4. Drawing Canvas History State
   const [strokes, setStrokes] = useState<Stroke[]>([]);
@@ -71,7 +69,7 @@ export const App: React.FC = () => {
     handCount: 0,
   });
 
-  // 6. UI Modals & Drawer State (Default false: no popup on start/refresh)
+  // 6. UI Modals & Drawer State
   const [isSidebarOpen, setIsSidebarOpen] = useState<boolean>(false);
   const [isGestureGuideOpen, setIsGestureGuideOpen] = useState<boolean>(false);
 
@@ -99,7 +97,6 @@ export const App: React.FC = () => {
   const activeRawPointsRef = useRef<{ x: number; y: number }[]>([]);
   const holdTimerRef = useRef<number>(0);
   const animationFrameIdRef = useRef<number | null>(null);
-  const lastButtonTriggerTimeRef = useRef<number>(0);
 
   // Handle window resizing
   useEffect(() => {
@@ -168,105 +165,62 @@ export const App: React.FC = () => {
           handCount: trackResult.handCount,
         });
 
-        // 1. TOP INTERACTIVE BUTTON COLLISION CHECK (Y <= 0.16)
-        if (gestureRes.cursorPoint && gestureRes.cursorPoint.y <= 0.16) {
-          const cx = gestureRes.cursorPoint.x;
-          let matchedBtn: typeof TOP_BUTTONS[0] | null = null;
+        // 1. INSTANT 0-DELAY DRAWING ACROSS FULL CANVAS
+        if (currentGesture === 'DRAW' && gestureRes.cursorPoint) {
+          const smoothedPt = smootherRef.current.smooth(
+            gestureRes.cursorPoint.x,
+            gestureRes.cursorPoint.y,
+            currentBrush.smoothing
+          );
 
-          for (const btn of TOP_BUTTONS) {
-            if (cx >= btn.minX && cx <= btn.maxX) {
-              matchedBtn = btn;
-              break;
+          // If user switches pen style or color mid-session, commit old stroke & start new stroke segment
+          if (
+            currentActiveStroke &&
+            (currentActiveStroke.style !== currentBrush.style ||
+              currentActiveStroke.color !== currentBrush.color ||
+              currentActiveStroke.size !== currentBrush.size)
+          ) {
+            if (activeRawPointsRef.current.length >= 2) {
+              setStrokes((prev) => [...prev, currentActiveStroke]);
             }
-          }
-
-          if (matchedBtn) {
-            setHoveredTopButton(matchedBtn.id);
-            const now = Date.now();
-
-            if (now - lastButtonTriggerTimeRef.current > 350) {
-              lastButtonTriggerTimeRef.current = now;
-
-              if (matchedBtn.isClear) {
-                setStrokes([]);
-                setUndoStack([]);
-              } else {
-                const newColor = matchedBtn.color;
-                setBrushSettings((prev) => ({ ...prev, color: newColor }));
-                setIsEraserActive(false);
-              }
-            }
+            activeRawPointsRef.current = [smoothedPt];
           } else {
-            setHoveredTopButton(null);
+            activeRawPointsRef.current.push(smoothedPt);
           }
 
-          // In top bar area -> Commit active stroke
+          const smoothPoints = generateSmoothStrokePoints(
+            activeRawPointsRef.current,
+            currentBrush.smoothing
+          );
+
+          const updatedStroke: Stroke = {
+            id:
+              currentActiveStroke &&
+              currentActiveStroke.style === currentBrush.style &&
+              currentActiveStroke.color === currentBrush.color
+                ? currentActiveStroke.id
+                : `stroke-${Date.now()}`,
+            points: smoothPoints,
+            color: currentBrush.color,
+            size: currentBrush.size,
+            opacity: currentBrush.opacity,
+            style: currentBrush.style,
+            timestamp: Date.now(),
+          };
+
+          setActiveStroke(updatedStroke);
+        } else {
+          // Hand lowered / finger folded -> Instantly end stroke segment
           if (activeRawPointsRef.current.length >= 2 && currentActiveStroke) {
             setStrokes((prev) => [...prev, currentActiveStroke]);
+            setUndoStack([]);
           }
           activeRawPointsRef.current = [];
           smootherRef.current.reset();
           setActiveStroke(null);
-        } else {
-          setHoveredTopButton(null);
-
-          // 2. INSTANT 0-DELAY DRAWING BELOW TOP BAR (Y > 0.16)
-          if (currentGesture === 'DRAW' && gestureRes.cursorPoint) {
-            const smoothedPt = smootherRef.current.smooth(
-              gestureRes.cursorPoint.x,
-              gestureRes.cursorPoint.y,
-              currentBrush.smoothing
-            );
-
-            // If user switches pen style or color mid-session, commit old stroke & start new stroke segment
-            if (
-              currentActiveStroke &&
-              (currentActiveStroke.style !== currentBrush.style ||
-                currentActiveStroke.color !== currentBrush.color ||
-                currentActiveStroke.size !== currentBrush.size)
-            ) {
-              if (activeRawPointsRef.current.length >= 2) {
-                setStrokes((prev) => [...prev, currentActiveStroke]);
-              }
-              activeRawPointsRef.current = [smoothedPt];
-            } else {
-              activeRawPointsRef.current.push(smoothedPt);
-            }
-
-            const smoothPoints = generateSmoothStrokePoints(
-              activeRawPointsRef.current,
-              currentBrush.smoothing
-            );
-
-            const updatedStroke: Stroke = {
-              id:
-                currentActiveStroke &&
-                currentActiveStroke.style === currentBrush.style &&
-                currentActiveStroke.color === currentBrush.color
-                  ? currentActiveStroke.id
-                  : `stroke-${Date.now()}`,
-              points: smoothPoints,
-              color: currentBrush.color,
-              size: currentBrush.size,
-              opacity: currentBrush.opacity,
-              style: currentBrush.style,
-              timestamp: Date.now(),
-            };
-
-            setActiveStroke(updatedStroke);
-          } else {
-            // Hand lowered / finger folded -> Instantly end stroke segment
-            if (activeRawPointsRef.current.length >= 2 && currentActiveStroke) {
-              setStrokes((prev) => [...prev, currentActiveStroke]);
-              setUndoStack([]);
-            }
-            activeRawPointsRef.current = [];
-            smootherRef.current.reset();
-            setActiveStroke(null);
-          }
         }
 
-        // 3. ERASER GESTURE LOGIC
+        // 2. ERASER GESTURE LOGIC
         if (currentGesture === 'ERASE' && gestureRes.cursorPoint) {
           setStrokes((prev) =>
             eraseStrokesInRadius(
@@ -279,7 +233,7 @@ export const App: React.FC = () => {
           );
         }
 
-        // 4. HOLD-TO-CLEAR PALM GESTURE LOGIC
+        // 3. HOLD-TO-CLEAR PALM GESTURE LOGIC
         if (currentGesture === 'CLEAR_HOLD') {
           holdTimerRef.current += 1 / (trackResult.fps || 30);
           const progress = Math.min(1, holdTimerRef.current / 1.5);
@@ -418,7 +372,6 @@ export const App: React.FC = () => {
         gestureState={gestureState}
         telemetry={telemetry}
         viewportDimensions={dimensions}
-        hoveredTopButton={hoveredTopButton}
       />
 
       {/* Floating Bottom Quick Dock */}
@@ -443,7 +396,7 @@ export const App: React.FC = () => {
         setBackgroundPreset={setBackgroundPreset}
       />
 
-      {/* On-Demand Hand Gesture Instructions Modal (Triggers via top nav Help button) */}
+      {/* Hand Gesture Instructions Modal */}
       <GestureInstructionsModal
         isOpen={isGestureGuideOpen}
         onClose={() => setIsGestureGuideOpen(false)}
