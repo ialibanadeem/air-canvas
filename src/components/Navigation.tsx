@@ -133,6 +133,17 @@ export const Navigation: React.FC<NavigationProps> = ({
           onClick={() => setBrushSettings((prev) => ({ ...prev, color: '#3b82f6' }))}
           title="Blue"
         />
+
+        <div className="mobile-nav-divider" />
+
+        {/* Mobile Help / Instructions Modal Trigger */}
+        <button
+          className="mobile-help-btn"
+          onClick={onOpenGestureGuide}
+          title="Gesture Instructions"
+        >
+          <HelpCircle className="w-4 h-4 text-cyan-400" />
+        </button>
       </div>
 
       {/* Right Desktop Controls */}

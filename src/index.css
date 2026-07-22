@@ -1347,6 +1347,18 @@ body, html {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.6);
   }
 
+  .mobile-help-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border-radius: 8px;
+    background: rgba(0, 240, 255, 0.1);
+    border: 1px solid rgba(0, 240, 255, 0.25);
+    cursor: pointer;
+  }
+
   .sidebar-drawer {
     width: 100vw;
     top: 52px;
@@ -1359,10 +1371,25 @@ body, html {
     font-size: 10px;
   }
 
+  .modal-backdrop {
+    padding: 12px;
+    align-items: center;
+    justify-content: center;
+  }
+
   .gesture-modal-card {
-    max-width: 94vw;
-    max-height: 90vh;
-    overflow-y: auto;
+    width: 100%;
+    max-width: 90vw;
+    border-radius: 18px;
+  }
+
+  .gesture-modal-header {
+    padding: 12px 16px;
+  }
+
+  .gesture-modal-body {
+    padding: 14px 16px;
+    gap: 12px;
   }
 
   .gesture-cards-grid {
@@ -1371,7 +1398,27 @@ body, html {
   }
 
   .instruction-gesture-card {
+    padding: 10px 12px;
+    border-radius: 12px;
+  }
+
+  .card-pink {
+    display: none; /* Hide 2-finger eraser card on mobile layout for ultra-clean fit */
+  }
+
+  .instruction-title {
+    font-size: 13px;
+  }
+
+  .instruction-desc {
+    font-size: 11px;
+    line-height: 1.35;
+  }
+
+  .gesture-cta-button {
     padding: 10px;
+    font-size: 12px;
+    border-radius: 12px;
   }
 }
 
