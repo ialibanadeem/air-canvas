@@ -355,6 +355,8 @@ export const App: React.FC = () => {
         onExportSVG={() => downloadSVG(strokes, dimensions.width, dimensions.height)}
         isFullscreen={isFullscreen}
         onToggleFullscreen={toggleFullscreen}
+        brushSettings={brushSettings}
+        setBrushSettings={setBrushSettings}
       />
 
       {/* Main Fullscreen Viewport Layer */}

@@ -13,8 +13,9 @@ import {
   Minimize2,
   Sparkles,
   HelpCircle,
+  Pencil,
 } from 'lucide-react';
-import type { ViewportMode } from '../types/canvas';
+import type { ViewportMode, BrushSettings } from '../types/canvas';
 
 interface NavigationProps {
   viewportMode: ViewportMode;
@@ -33,6 +34,8 @@ interface NavigationProps {
   onExportSVG: () => void;
   isFullscreen: boolean;
   onToggleFullscreen: () => void;
+  brushSettings: BrushSettings;
+  setBrushSettings: React.Dispatch<React.SetStateAction<BrushSettings>>;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({
@@ -52,6 +55,8 @@ export const Navigation: React.FC<NavigationProps> = ({
   onExportSVG,
   isFullscreen,
   onToggleFullscreen,
+  brushSettings,
+  setBrushSettings,
 }) => {
   return (
     <header className="top-nav-bar">
@@ -65,7 +70,7 @@ export const Navigation: React.FC<NavigationProps> = ({
         </div>
       </div>
 
-      {/* Center Viewport Selector */}
+      {/* Center Viewport Selector (Desktop Only) */}
       <div className="nav-mode-selector">
         <button
           className={`mode-btn ${viewportMode === 'camera' ? 'active' : ''}`}
@@ -93,7 +98,44 @@ export const Navigation: React.FC<NavigationProps> = ({
         </button>
       </div>
 
-      {/* Right Controls */}
+      {/* Mobile Web Exclusive Minimal Top Controls */}
+      <div className="mobile-header-controls">
+        {/* Pens: Pencil & Glow */}
+        <button
+          className={`mobile-pen-btn ${brushSettings.style === 'pencil' ? 'active' : ''}`}
+          onClick={() => setBrushSettings((prev) => ({ ...prev, style: 'pencil' }))}
+          title="Pencil Brush"
+        >
+          <Pencil className="w-3.5 h-3.5" />
+          <span>Pencil</span>
+        </button>
+        <button
+          className={`mobile-pen-btn ${brushSettings.style === 'glow' ? 'active' : ''}`}
+          onClick={() => setBrushSettings((prev) => ({ ...prev, style: 'glow' }))}
+          title="Glow Brush"
+        >
+          <Sparkles className="w-3.5 h-3.5" />
+          <span>Glow</span>
+        </button>
+
+        <div className="mobile-nav-divider" />
+
+        {/* Colors: Pink & Blue */}
+        <button
+          className={`mobile-swatch ${brushSettings.color === '#ec4899' ? 'active' : ''}`}
+          style={{ backgroundColor: '#ec4899' }}
+          onClick={() => setBrushSettings((prev) => ({ ...prev, color: '#ec4899' }))}
+          title="Pink"
+        />
+        <button
+          className={`mobile-swatch ${brushSettings.color === '#3b82f6' ? 'active' : ''}`}
+          style={{ backgroundColor: '#3b82f6' }}
+          onClick={() => setBrushSettings((prev) => ({ ...prev, color: '#3b82f6' }))}
+          title="Blue"
+        />
+      </div>
+
+      {/* Right Desktop Controls */}
       <div className="nav-actions">
         <button
           className={`icon-action-btn ${mirrorCamera ? 'active' : ''}`}
