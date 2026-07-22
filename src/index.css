@@ -1256,11 +1256,10 @@ body, html {
 
 @media (max-width: 768px) {
   .top-nav-bar {
-    height: auto;
-    min-height: 56px;
-    padding-top: max(8px, env(safe-area-inset-top));
-    padding-left: max(12px, env(safe-area-inset-left));
-    padding-right: max(12px, env(safe-area-inset-right));
+    height: 52px;
+    padding-top: max(6px, env(safe-area-inset-top));
+    padding-left: max(10px, env(safe-area-inset-left));
+    padding-right: max(10px, env(safe-area-inset-right));
   }
 
   .nav-subtitle {
@@ -1268,84 +1267,88 @@ body, html {
   }
 
   .nav-title {
-    font-size: 15px;
+    font-size: 14px;
+    letter-spacing: 0.5px;
   }
 
-  .mode-btn span {
-    display: none;
+  .nav-mode-selector {
+    display: none; /* Hide viewport mode selector on mobile for ultra-clean header */
   }
 
-  .mode-btn {
-    padding: 5px 7px;
+  .nav-actions {
+    gap: 4px;
   }
 
-  .export-dropdown-group span {
-    display: none;
+  .icon-action-btn {
+    width: 32px;
+    height: 32px;
   }
 
-  .nav-btn-primary, .nav-btn-secondary {
-    padding: 6px 8px;
+  .export-dropdown-group .nav-btn-secondary {
+    display: none; /* Hide SVG export button on mobile header */
+  }
+
+  .nav-btn-primary {
+    padding: 5px 8px;
+    font-size: 11px;
   }
 
   .floating-control-dock {
-    bottom: calc(12px + env(safe-area-inset-bottom));
-    width: calc(100vw - 20px);
-    max-width: 100vw;
-    border-radius: 18px;
-    padding: 6px 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    width: calc(100vw - 24px);
+    max-width: 480px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 20px;
+    padding: 5px 10px;
     gap: 6px;
-    justify-content: flex-start;
-    overflow-x: auto;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    touch-action: pan-x;
+    justify-content: space-between;
+    overflow: hidden;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
   }
 
-  .floating-control-dock::-webkit-scrollbar {
-    display: none;
+  .dock-size-control {
+    display: none; /* Hide size slider on mobile dock (adjustable in drawer) */
   }
 
-  .style-btn span {
-    display: none;
-  }
-
-  .style-btn {
-    min-height: 36px;
-    padding: 6px 8px;
+  .dock-tool-btn {
+    min-height: 34px;
+    padding: 4px 8px;
+    font-size: 11px;
   }
 
   .dock-tool-btn span {
     display: none;
   }
 
-  .dock-tool-btn {
-    min-height: 36px;
-    padding: 6px 10px;
+  .style-btn {
+    min-height: 34px;
+    padding: 4px 6px;
   }
 
-  .swatch-btn {
-    width: 24px;
-    height: 24px;
-    min-width: 24px;
-  }
-
-  .dock-size-control span {
+  .style-btn span {
     display: none;
   }
 
-  .dock-slider {
-    width: 50px;
+  .swatch-btn {
+    width: 22px;
+    height: 22px;
+    min-width: 22px;
+  }
+
+  .dock-color-swatches {
+    gap: 4px;
   }
 
   .sidebar-drawer {
     width: 100vw;
-    top: 56px;
+    top: 52px;
   }
 
   .minimal-watermark-link {
-    bottom: calc(68px + env(safe-area-inset-bottom));
+    bottom: calc(64px + env(safe-area-inset-bottom));
     left: 10px;
-    padding: 4px 8px;
+    padding: 3px 8px;
     font-size: 10px;
   }
 
@@ -1357,46 +1360,25 @@ body, html {
 
   .gesture-cards-grid {
     grid-template-columns: 1fr;
-    gap: 10px;
+    gap: 8px;
   }
 
   .instruction-gesture-card {
-    padding: 12px;
-  }
-}
-
-@media (max-width: 640px) {
-  .nav-mode-selector {
-    display: none; /* Hide center mode selector on narrow mobile web viewports for clean header */
-  }
-
-  .nav-title {
-    font-size: 14px;
-    letter-spacing: 0.5px;
-  }
-
-  .nav-actions {
-    gap: 3px;
-  }
-
-  .icon-action-btn {
-    width: 32px;
-    height: 32px;
+    padding: 10px;
   }
 }
 
 @media (max-width: 480px) {
   .nav-title {
     font-size: 13px;
-    letter-spacing: 0.5px;
   }
 
   .nav-logo-icon {
-    width: 30px;
-    height: 30px;
+    width: 28px;
+    height: 28px;
   }
 
   .dock-divider {
-    height: 18px;
+    height: 16px;
   }
 }
